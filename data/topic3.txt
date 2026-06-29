@@ -1,0 +1,9 @@
+A confusion matrix is just a table that shows how good a model is at predicting yes or no answers. It counts four things: correct yes, correct no, wrong yes, and wrong no.
+
+Precision answers this question: when the model says "yes," how often is it actually right?
+
+Recall answers this question: out of all the real "yes" cases, how many did the model actually catch?
+
+F1 score is a single number that balances precision and recall together.
+
+Accuracy alone can trick you. For example, if 95 out of 100 emails are not spam, a lazy model that always says "not spam" will be right 95% of the time, even though it never catches any actual spam. This is why precision and recall matter more in cases like this.

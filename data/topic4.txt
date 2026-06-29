@@ -1,0 +1,5 @@
+KNN (K-Nearest Neighbors) is a simple way for a computer to guess what group something belongs to. It looks at the closest "k" examples around it and picks whatever group most of them belong to.
+
+If k is very small, like 1, the model gets confused easily by noise or weird examples. If k is very large, the model becomes too relaxed and may ignore useful nearby information. So picking the right k matters.
+
+Decision trees work differently. They ask a series of yes/no questions about the data to split it into groups, trying to make each group as "pure" as possible (mostly one class). If the tree asks too many questions and gets too deep, it can overfit, just like memorizing instead of learning. That's why people often limit how deep a tree can grow.

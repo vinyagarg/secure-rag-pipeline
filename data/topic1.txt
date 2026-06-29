@@ -1,0 +1,7 @@
+In machine learning, there are two kinds of mistakes a model can make: bias and variance.
+
+Bias means the model is too simple. It doesn't learn enough from the data, so it makes mistakes even on the data it was trained on. This is called underfitting.
+
+Variance means the model is too complicated. It learns the training data so well, including all its tiny random mistakes, that it fails on new data it hasn't seen before. This is called overfitting.
+
+A good model finds the middle ground. Not too simple, not too complicated. Just right for the problem. Ways to help with this include trying the model on different parts of the data (called cross-validation) and using tricks that stop the model from becoming too complicated (called regularization).
