@@ -1,7 +1,15 @@
 import streamlit as st
 import requests
+from db import init_db, save_message, load_messages, clear_messages
 
 st.set_page_config(page_title="RAGuard", page_icon="🛡️", layout="wide", initial_sidebar_state="expanded")
+
+init_db()
+
+if "messages" not in st.session_state:
+    st.session_state.messages = load_messages()
+if "pending_question" not in st.session_state:
+    st.session_state.pending_question = None
 
 st.markdown("""
 <style>
@@ -116,11 +124,6 @@ div[data-testid="stSidebar"] button:hover {
 </style>
 """, unsafe_allow_html=True)
 
-if "messages" not in st.session_state:
-    st.session_state.messages = []
-if "pending_question" not in st.session_state:
-    st.session_state.pending_question = None
-
 def confidence_label(distance):
     if distance < 0.8:
         return "High confidence", "conf-high"
@@ -135,19 +138,14 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("**Try asking:**")
 
-    example_questions = [
-        "What is overfitting?",
-        "What does precision mean?",
-        "Explain KNN in simple terms",
-        "What is the capital of France?"
-    ]
-    for q in example_questions:
+    for q in ["What is overfitting?", "What does precision mean?", "Explain KNN in simple terms", "What is the capital of France?"]:
         if st.button(q, use_container_width=True, key=f"ex_{q}"):
             st.session_state.pending_question = q
 
     st.markdown("---")
     if st.button("🗑️ Clear chat", use_container_width=True):
         st.session_state.messages = []
+        clear_messages()
         st.rerun()
 
     st.markdown("---")
@@ -182,15 +180,13 @@ st.session_state.pending_question = None
 
 if query_to_run:
     st.session_state.messages.append({"role": "user", "content": query_to_run})
+    save_message("user", query_to_run)
     with st.chat_message("user", avatar="🧑‍💻"):
         st.write(query_to_run)
 
     with st.chat_message("assistant", avatar="🛡️"):
         with st.spinner("Thinking..."):
-            response = requests.post(
-                "http://127.0.0.1:8000/query",
-                json={"question": query_to_run}
-            )
+            response = requests.post("http://127.0.0.1:8000/query", json={"question": query_to_run})
             data = response.json()
             st.write(data["answer"])
 
@@ -205,8 +201,7 @@ if query_to_run:
                     st.write(f"• {s}")
 
     st.session_state.messages.append({
-        "role": "assistant",
-        "content": data["answer"],
-        "sources": data["sources"],
-        "avg_distance": avg_distance
+        "role": "assistant", "content": data["answer"],
+        "sources": data["sources"], "avg_distance": avg_distance
     })
+    save_message("assistant", data["answer"], data["sources"], avg_distance)
