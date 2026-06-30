@@ -3,6 +3,8 @@ sys.path.append("retrieval")
 from fastapi import FastAPI
 from pydantic import BaseModel
 from rag import ask
+from dotenv import load_dotenv
+load_dotenv()
 
 app = FastAPI(title="Secure RAG API")
 
