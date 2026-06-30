@@ -1,0 +1,77 @@
+[
+  {
+    "question": "What is overfitting?",
+    "expected_keywords": ["memorizes", "training data", "new data"],
+    "expected_source": "topic2.txt"
+  },
+  {
+    "question": "What does precision mean?",
+    "expected_keywords": ["predicted", "positive", "actually right"],
+    "expected_source": "topic3.txt"
+  },
+  {
+    "question": "What is L1 regularization?",
+    "expected_keywords": ["Lasso", "remove", "features"],
+    "expected_source": "topic2.txt"
+  },
+  {
+    "question": "Explain KNN in simple terms",
+    "expected_keywords": ["closest", "k", "group"],
+    "expected_source": "topic4.txt"
+  },
+  {
+    "question": "What is the bias-variance tradeoff?",
+    "expected_keywords": ["bias", "variance", "simple", "complicated"],
+    "expected_source": "topic1.txt"
+  },
+  {
+    "question": "What does recall measure?",
+    "expected_keywords": ["actual", "positive", "caught"],
+    "expected_source": "topic3.txt"
+  },
+  {
+    "question": "What is the difference between L1 and L2 regularization?",
+    "expected_keywords": ["Lasso", "Ridge", "shrink"],
+    "expected_source": "topic2.txt"
+  },
+  {
+    "question": "How does a decision tree work?",
+    "expected_keywords": ["questions", "split", "groups"],
+    "expected_source": "topic4.txt"
+  },
+  {
+    "question": "What is Bayes theorem used for?",
+    "expected_keywords": ["update", "probability", "evidence"],
+    "expected_source": "topic5.txt"
+  },
+  {
+    "question": "Why doesn't correlation imply causation?",
+    "expected_keywords": ["connected", "cause", "third factor"],
+    "expected_source": "topic5.txt"
+  },
+  {
+    "question": "What is the F1 score?",
+    "expected_keywords": ["balance", "precision", "recall"],
+    "expected_source": "topic3.txt"
+  },
+  {
+    "question": "What happens if k is too small in KNN?",
+    "expected_keywords": ["noise", "confused", "overfit"],
+    "expected_source": "topic4.txt"
+  },
+  {
+    "question": "What is underfitting?",
+    "expected_keywords": ["too simple", "doesn't learn", "badly"],
+    "expected_source": "topic1.txt"
+  },
+  {
+    "question": "What is the base rate problem in probability?",
+    "expected_keywords": ["rare", "disease", "false"],
+    "expected_source": "topic5.txt"
+  },
+  {
+    "question": "How can you prevent overfitting?",
+    "expected_keywords": ["more data", "simpler model", "early stopping"],
+    "expected_source": "topic2.txt"
+  }
+]
