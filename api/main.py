@@ -12,6 +12,7 @@ class QueryRequest(BaseModel):
 class QueryResponse(BaseModel):
     answer: str
     sources: list[str]
+    distances: list[float]
 
 @app.get("/")
 def health_check():
@@ -21,4 +22,5 @@ def health_check():
 def query_endpoint(request: QueryRequest):
     answer, chunks = ask(request.question)
     sources = [c["source"] for c in chunks]
-    return QueryResponse(answer=answer, sources=sources)
+    distances = [c["distance"] for c in chunks]
+    return QueryResponse(answer=answer, sources=sources, distances=distances)
