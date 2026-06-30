@@ -1,0 +1,15 @@
+{
+  "timestamp": "2026-06-30T14:32:04.392676",
+  "retrieval": {
+    "recall_at_3": 1.0,
+    "hits": 15,
+    "total": 15
+  },
+  "generation_quality": {
+    "avg_relevance": 4.93,
+    "avg_faithfulness": 4.73
+  },
+  "consistency": {
+    "avg_similarity": 1.0
+  }
+}
