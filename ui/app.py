@@ -1,6 +1,9 @@
 import streamlit as st
 import requests
 from db import init_db, save_message, load_messages, clear_messages
+import sys
+sys.path.append("logs")
+from audit_logger import get_recent_logs, get_stats
 
 st.set_page_config(page_title="RAGuard", page_icon="🛡️", layout="wide", initial_sidebar_state="expanded")
 
@@ -151,57 +154,85 @@ with st.sidebar:
     st.markdown("---")
     st.caption("Built with FastAPI, ChromaDB, and Llama 3.3")
 
-st.markdown("""
-<div class="hero-card">
-    <div class="hero-title">🛡️ RAGuard</div>
-    <div class="hero-tagline">Smart enough to answer. Smart enough to know when not to.</div>
-    <div class="badge-row">
-        <span class="badge">Grounded generation</span>
-        <span class="badge">Source-cited</span>
-        <span class="badge">Refuses unknowns</span>
+tab1, tab2 = st.tabs(["💬 Chat", "📊 Admin"])
+
+with tab2:
+    st.markdown("### 📊 System Observability")
+    stats = get_stats()
+
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("Total Requests", stats["total_requests"])
+    col2.metric("Blocked Requests", stats["total_blocked"])
+    col3.metric("Block Rate", f"{stats['block_rate']*100:.1f}%")
+    col4.metric("Avg Grounding", f"{stats['avg_grounding_score']}/5" if stats['avg_grounding_score'] else "N/A")
+
+    st.markdown("---")
+    st.markdown("### Recent Requests")
+    logs = get_recent_logs(20)
+    if logs:
+        import pandas as pd
+        df = pd.DataFrame(logs, columns=["Timestamp", "Query", "Blocked", "Blocked Stage", "Grounding Score", "Avg Distance", "Latency (ms)"])
+        df["Blocked"] = df["Blocked"].map({1: "🚫 Yes", 0: "✅ No"})
+        st.dataframe(df, use_container_width=True)
+    else:
+        st.info("No requests logged yet.")
+
+with tab1:
+    st.markdown("""
+    <div class="hero-card">
+        <div class="hero-title">🛡️ RAGuard</div>
+        <div class="hero-tagline">Smart enough to answer. Smart enough to know when not to.</div>
+        <div class="badge-row">
+            <span class="badge">Grounded generation</span>
+            <span class="badge">Source-cited</span>
+            <span class="badge">Refuses unknowns</span>
+        </div>
     </div>
-</div>
-""", unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
-for msg in st.session_state.messages:
-    with st.chat_message(msg["role"], avatar="🧑‍💻" if msg["role"] == "user" else "🛡️"):
-        st.write(msg["content"])
-        if msg["role"] == "assistant" and "sources" in msg:
-            if msg.get("avg_distance") is not None:
-                label, css_class = confidence_label(msg["avg_distance"])
-                st.markdown(f'<span class="confidence-pill {css_class}">{label}</span>', unsafe_allow_html=True)
-            with st.expander("📄 Sources"):
-                for s in msg["sources"]:
-                    st.write(f"• {s}")
+    for msg in st.session_state.messages:
+        with st.chat_message(msg["role"], avatar="🧑‍💻" if msg["role"] == "user" else "🛡️"):
+            st.write(msg["content"])
+            if msg["role"] == "assistant" and "sources" in msg:
+                if msg.get("avg_distance") is not None:
+                    label, css_class = confidence_label(msg["avg_distance"])
+                    st.markdown(f'{label}', unsafe_allow_html=True)
+                with st.expander("📄 Sources"):
+                    for s in msg["sources"]:
+                        st.write(f"• {s}")
 
-typed_input = st.chat_input("Ask a question about the documents...")
-query_to_run = st.session_state.pending_question or typed_input
-st.session_state.pending_question = None
+    typed_input = st.chat_input("Ask a question about the documents...")
+    query_to_run = st.session_state.pending_question or typed_input
+    st.session_state.pending_question = None
 
-if query_to_run:
-    st.session_state.messages.append({"role": "user", "content": query_to_run})
-    save_message("user", query_to_run)
-    with st.chat_message("user", avatar="🧑‍💻"):
-        st.write(query_to_run)
+    if query_to_run:
+        st.session_state.messages.append({"role": "user", "content": query_to_run})
+        save_message("user", query_to_run)
+        with st.chat_message("user", avatar="🧑‍💻"):
+            st.write(query_to_run)
 
-    with st.chat_message("assistant", avatar="🛡️"):
-        with st.spinner("Thinking..."):
-            response = requests.post("http://127.0.0.1:8000/query", json={"question": query_to_run})
-            data = response.json()
-            st.write(data["answer"])
+        with st.chat_message("assistant", avatar="🛡️"):
+            with st.spinner("Thinking..."):
+                response = requests.post("http://127.0.0.1:8000/query", json={"question": query_to_run})
+                data = response.json()
+                st.write(data["answer"])
 
-            avg_distance = None
-            if "distances" in data and data["distances"]:
-                avg_distance = sum(data["distances"]) / len(data["distances"])
-                label, css_class = confidence_label(avg_distance)
-                st.markdown(f'<span class="confidence-pill {css_class}">{label}</span>', unsafe_allow_html=True)
+                avg_distance = None
+                if "distances" in data and data["distances"]:
+                    avg_distance = sum(data["distances"]) / len(data["distances"])
+                    label, css_class = confidence_label(avg_distance)
+                    st.markdown(f'<span class="confidence-pill {css_class}">{label}</span>', unsafe_allow_html=True)
 
-            with st.expander("📄 Sources"):
-                for s in data["sources"]:
-                    st.write(f"• {s}")
+                with st.expander("📄 Sources"):
+                    for s in data["sources"]:
+                        st.write(f"• {s}")
 
-    st.session_state.messages.append({
-        "role": "assistant", "content": data["answer"],
-        "sources": data["sources"], "avg_distance": avg_distance
-    })
-    save_message("assistant", data["answer"], data["sources"], avg_distance)
+        st.session_state.messages.append({
+            "role": "assistant",
+            "content": data["answer"],
+            "sources": data["sources"],
+            "avg_distance": avg_distance
+        })
+        save_message("assistant", data["answer"], data["sources"], avg_distance)
+   
+

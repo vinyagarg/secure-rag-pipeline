@@ -46,6 +46,30 @@ def run_full_eval():
     print(f"Avg Faithfulness: {final_report['generation_quality']['avg_faithfulness']}/5")
     print(f"Avg Consistency: {final_report['consistency']['avg_similarity']}")
     print(f"\nSaved to eval/eval_report.json")
+    print("\n--- Quality Gate ---")
+    passed = True
+    if final_report["retrieval"]["recall_at_3"] < 0.8:
+        print("❌ Recall@3 below threshold (0.8)")
+        passed = False
+    else:
+        print(f"✅ Recall@3: {final_report['retrieval']['recall_at_3']}")
+
+    if final_report["generation_quality"]["avg_faithfulness"] < 4.0:
+        print("❌ Avg faithfulness below threshold (4.0)")
+        passed = False
+    else:
+        print(f"✅ Avg faithfulness: {final_report['generation_quality']['avg_faithfulness']}")
+
+    if final_report["consistency"]["avg_similarity"] < 0.85:
+        print("❌ Avg consistency below threshold (0.85)")
+        passed = False
+    else:
+        print(f"✅ Avg consistency: {final_report['consistency']['avg_similarity']}")
+
+    if passed:
+        print("\n🟢 ALL QUALITY GATES PASSED")
+    else:
+        print("\n🔴 SOME QUALITY GATES FAILED — check eval_report.json for details")
 
 if __name__ == "__main__":
     run_full_eval()
