@@ -49,36 +49,47 @@ def log_request(query, result, latency_ms):
     conn.close()
 
 def get_recent_logs(limit=20):
-    conn = sqlite3.connect(DB_PATH)
-    rows = conn.execute("""
-        SELECT timestamp, query, blocked, blocked_stage,
-               grounding_score, avg_distance, latency_ms
-        FROM audit_log
-        ORDER BY id DESC
-        LIMIT ?
-    """, (limit,)).fetchall()
-    conn.close()
-    return rows
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        rows = conn.execute("""
+            SELECT timestamp, query, blocked, blocked_stage,
+                   grounding_score, avg_distance, latency_ms
+            FROM audit_log
+            ORDER BY id DESC
+            LIMIT ?
+        """, (limit,)).fetchall()
+        conn.close()
+        return rows
+    except Exception:
+        return []
 
 def get_stats():
-    conn = sqlite3.connect(DB_PATH)
-    stats = conn.execute("""
-        SELECT
-            COUNT(*) as total_requests,
-            SUM(blocked) as total_blocked,
-            AVG(CASE WHEN blocked=0 THEN grounding_score END) as avg_grounding,
-            AVG(CASE WHEN blocked=0 THEN latency_ms END) as avg_latency_ms
-        FROM audit_log
-    """).fetchone()
-    conn.close()
-    return {
-        "total_requests": stats[0],
-        "total_blocked": stats[1],
-        "block_rate": round(stats[1]/stats[0], 3) if stats[0] else 0,
-        "avg_grounding_score": round(stats[2], 2) if stats[2] else None,
-        "avg_latency_ms": round(stats[3], 2) if stats[3] else None
-    }
-
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        stats = conn.execute("""
+            SELECT
+                COUNT(*) as total_requests,
+                SUM(blocked) as total_blocked,
+                AVG(CASE WHEN blocked=0 THEN grounding_score END) as avg_grounding,
+                AVG(CASE WHEN blocked=0 THEN latency_ms END) as avg_latency_ms
+            FROM audit_log
+        """).fetchone()
+        conn.close()
+        return {
+            "total_requests": stats[0] or 0,
+            "total_blocked": stats[1] or 0,
+            "block_rate": round((stats[1] or 0)/(stats[0] or 1), 3),
+            "avg_grounding_score": round(stats[2], 2) if stats[2] else None,
+            "avg_latency_ms": round(stats[3], 2) if stats[3] else None
+        }
+    except Exception:
+        return {
+            "total_requests": 0,
+            "total_blocked": 0,
+            "block_rate": 0.0,
+            "avg_grounding_score": None,
+            "avg_latency_ms": None
+        }
 if __name__ == "__main__":
     init_audit_db()
     print("Audit log database initialized.")

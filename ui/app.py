@@ -4,11 +4,10 @@ import requests
 from db import init_db, save_message, load_messages, clear_messages
 import sys
 sys.path.append("logs")
-from audit_logger import get_recent_logs, get_stats
-
+from audit_logger import get_recent_logs, get_stats, init_audit_db
 st.set_page_config(page_title="RAGuard", page_icon="🛡️", layout="wide", initial_sidebar_state="expanded")
 
-init_db()
+init_audit_db()
 
 if "messages" not in st.session_state:
     st.session_state.messages = load_messages()
