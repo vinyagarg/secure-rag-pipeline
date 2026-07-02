@@ -1,4 +1,5 @@
 import streamlit as st
+import os
 import requests
 from db import init_db, save_message, load_messages, clear_messages
 import sys
@@ -213,7 +214,8 @@ with tab1:
 
         with st.chat_message("assistant", avatar="🛡️"):
             with st.spinner("Thinking..."):
-                response = requests.post("http://127.0.0.1:8000/query", json={"question": query_to_run})
+                API_URL = os.getenv("API_URL", "http://127.0.0.1:8000")
+                response = requests.post(f"{API_URL}/query", json={"question": query_to_run})
                 data = response.json()
                 st.write(data["answer"])
 

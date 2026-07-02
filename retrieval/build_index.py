@@ -14,7 +14,6 @@ load_dotenv()
 JINA_API_KEY = os.getenv("JINA_API_KEY")
 
 def get_embeddings(texts: list[str]) -> list[list[float]]:
-    """Get embeddings from Jina AI API."""
     response = req.post(
         "https://api.jina.ai/v1/embeddings",
         headers={
@@ -27,6 +26,8 @@ def get_embeddings(texts: list[str]) -> list[list[float]]:
         }
     )
     data = response.json()
+    if "data" not in data:
+        raise ValueError(f"Jina API error: {data}")
     return [item["embedding"] for item in data["data"]]
 
 def build_index():
