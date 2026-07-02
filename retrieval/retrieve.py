@@ -1,17 +1,37 @@
-from sentence_transformers import SentenceTransformer
+"""
+retrieve.py — retrieves top-k semantically similar chunks using Jina AI embeddings API.
+"""
+import os
+import requests as req
 import chromadb
+import numpy as np
+from dotenv import load_dotenv
 
-_model = None
+load_dotenv()
+JINA_API_KEY = os.getenv("JINA_API_KEY")
 _collection = None
 
 def _load() -> None:
-    """Load embedding model and ChromaDB collection (lazy, cached after first call)."""
-    global _model, _collection
-    if _model is None:
-        _model = SentenceTransformer("all-MiniLM-L6-v2")
+    """Load ChromaDB collection (lazy, cached after first call)."""
+    global _collection
     if _collection is None:
         client = chromadb.PersistentClient(path="./chroma_db")
         _collection = client.get_collection("my_docs")
+
+def get_embedding(text: str) -> list[float]:
+    """Get a single embedding from Jina AI API."""
+    response = req.post(
+        "https://api.jina.ai/v1/embeddings",
+        headers={
+            "Authorization": f"Bearer {JINA_API_KEY}",
+            "Content-Type": "application/json"
+        },
+        json={
+            "model": "jina-embeddings-v3",
+            "input": [text]
+        }
+    )
+    return response.json()["data"][0]["embedding"]
 
 def retrieve(query: str, k: int = 3) -> list[dict]:
     """
@@ -19,8 +39,11 @@ def retrieve(query: str, k: int = 3) -> list[dict]:
     Returns a list of dicts with keys: text, distance, source.
     """
     _load()
-    query_embedding = _model.encode([query]).tolist()
-    results = _collection.query(query_embeddings=query_embedding, n_results=k)
+    query_embedding = get_embedding(query)
+    results = _collection.query(
+        query_embeddings=[query_embedding],
+        n_results=k
+    )
 
     matches = []
     for doc, distance, meta in zip(
