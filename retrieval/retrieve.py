@@ -4,7 +4,8 @@ import chromadb
 _model = None
 _collection = None
 
-def _load():
+def _load() -> None:
+    """Load embedding model and ChromaDB collection (lazy, cached after first call)."""
     global _model, _collection
     if _model is None:
         _model = SentenceTransformer("all-MiniLM-L6-v2")
@@ -12,7 +13,11 @@ def _load():
         client = chromadb.PersistentClient(path="./chroma_db")
         _collection = client.get_collection("my_docs")
 
-def retrieve(query, k=3):
+def retrieve(query: str, k: int = 3) -> list[dict]:
+    """
+    Retrieve the top-k most semantically similar chunks for a given query.
+    Returns a list of dicts with keys: text, distance, source.
+    """
     _load()
     query_embedding = _model.encode([query]).tolist()
     results = _collection.query(query_embeddings=query_embedding, n_results=k)

@@ -1,3 +1,16 @@
+"""
+rag_secure.py — RAGuard unified secure pipeline
+
+Flow:
+  user query
+    → input_guardrail (pattern check)
+    → llm_guardrail (LLM intent check)
+    → retrieve (vector search)
+    → generate (grounded LLM generation)
+    → output_guardrail (PII/secret check)
+    → grounding_check (faithfulness score)
+    → return structured result
+"""
 import sys
 sys.path.append("retrieval")
 sys.path.append("guardrails")

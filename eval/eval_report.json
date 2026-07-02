@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-07-01T20:47:19.251082",
+  "timestamp": "2026-07-02T12:18:27.561689",
   "retrieval": {
     "recall_at_3": 1.0,
     "hits": 15,
@@ -10,6 +10,6 @@
     "avg_faithfulness": 4.67
   },
   "consistency": {
-    "avg_similarity": 1.0
+    "avg_similarity": 0.997
   }
 }
