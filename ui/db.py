@@ -29,18 +29,21 @@ def save_message(role, content, sources=None, avg_distance=None):
     conn.close()
 
 def load_messages():
-    conn = sqlite3.connect(DB_PATH)
-    rows = conn.execute("SELECT role, content, sources, avg_distance FROM messages ORDER BY id ASC").fetchall()
-    conn.close()
-    messages = []
-    for role, content, sources_str, avg_distance in rows:
-        msg = {"role": role, "content": content}
-        if sources_str:
-            msg["sources"] = sources_str.split(",")
-        if avg_distance is not None:
-            msg["avg_distance"] = avg_distance
-        messages.append(msg)
-    return messages
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        rows = conn.execute("SELECT role, content, sources, avg_distance FROM messages ORDER BY id ASC").fetchall()
+        conn.close()
+        messages = []
+        for role, content, sources_str, avg_distance in rows:
+            msg = {"role": role, "content": content}
+            if sources_str:
+                msg["sources"] = sources_str.split(",")
+            if avg_distance is not None:
+                msg["avg_distance"] = avg_distance
+            messages.append(msg)
+        return messages
+    except Exception:
+        return []
 
 def clear_messages():
     conn = sqlite3.connect(DB_PATH)
