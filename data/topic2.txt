@@ -1,7 +1,0 @@
-Overfitting is when a model memorizes the training data instead of actually learning the pattern behind it. It does great on training data but badly on new data.
-
-Underfitting is the opposite. The model is too basic and does badly on both training data and new data.
-
-Regularization is a method to stop overfitting. It adds a small penalty so the model doesn't get too complicated. There are two common types. L1 (called Lasso) can completely remove some less useful features. L2 (called Ridge) just makes all features smaller and more balanced, without removing them.
-
-Other simple ways to reduce overfitting are using more training data, using a simpler model, stopping training early, and testing the model on data it hasn't seen before.

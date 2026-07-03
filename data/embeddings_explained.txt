@@ -1,0 +1,9 @@
+Embeddings are dense numerical vector representations of text (or other data) that capture semantic meaning. Two pieces of text with similar meanings will have embedding vectors that are close together in the high-dimensional vector space, even if they use completely different words.
+
+How embeddings are created: an embedding model (usually a transformer neural network) processes input text and outputs a fixed-length vector, typically between 384 and 1536 dimensions depending on the model. The model is trained on massive text datasets to learn that similar contexts produce similar vectors. For example, "overfitting" and "memorizing training data" would be close in embedding space because they appear in similar contexts across training documents.
+
+Popular embedding models include OpenAI's text-embedding-3-small and text-embedding-3-large, which are high quality but require API calls. Sentence-transformers like all-MiniLM-L6-v2 are free, open-source models that run locally and are excellent for most use cases. Jina AI provides free API-based embeddings that are competitive with commercial options. Cohere's embedding models are popular for multilingual applications.
+
+The dimensionality of embeddings represents a tradeoff: higher dimensional embeddings capture more nuance but require more storage and computation. The embedding dimension must match between the model used to build the index and the model used to embed queries at search time — mixing models from different providers or of different sizes will produce incorrect results.
+
+Embedding drift is an important production concern: if you switch embedding models, all previously embedded documents must be re-embedded and the vector index must be rebuilt from scratch, since vectors from different models are not comparable.

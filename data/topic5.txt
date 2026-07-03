@@ -1,5 +1,0 @@
-Bayes theorem is a way to update your guess about something when you get new information. 
-
-A common example is medical testing. Even if a test is 99% accurate, if the disease is very rare, a positive result still might not mean you actually have the disease. This surprises a lot of people, but it's because the disease is so rare to begin with that even a small error rate creates many false alarms. This is called the base rate problem.
-
-Correlation means two things tend to happen together. But just because two things are connected doesn't mean one causes the other. For example, ice cream sales and sunburns both go up in summer, but ice cream doesn't cause sunburns. Both are simply caused by hot weather. This is why "correlation is not causation" is an important rule in data analysis.

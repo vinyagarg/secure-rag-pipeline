@@ -1,0 +1,9 @@
+Vector databases are specialized databases designed to store and efficiently search high-dimensional vector embeddings. Unlike traditional relational databases that search by exact matching, vector databases use approximate nearest neighbor algorithms to find vectors that are semantically similar to a query vector.
+
+The most common similarity metrics used in vector databases are cosine similarity, which measures the angle between vectors regardless of their magnitude and is best for text embeddings, and Euclidean distance, which measures the straight-line distance between vectors. For normalized vectors, cosine similarity and dot product produce equivalent rankings.
+
+Popular vector databases include ChromaDB, an open-source local-first database ideal for development and small-to-medium scale applications. Pinecone is a fully managed cloud vector database that scales to billions of vectors. FAISS (Facebook AI Similarity Search) is a library optimized for fast in-memory similarity search. Weaviate and Qdrant are open-source vector databases that combine vector search with traditional filtering capabilities.
+
+Vector databases support two types of search: dense retrieval using embedding vectors, and sparse retrieval using keyword-based approaches like BM25. Hybrid search combines both dense and sparse retrieval to get the benefits of semantic understanding and exact keyword matching. This is particularly useful when queries contain specific technical terms or proper nouns that semantic search might handle poorly.
+
+Key concepts in vector databases include indexing algorithms like HNSW (Hierarchical Navigable Small World) that allow approximate nearest neighbor search in logarithmic time, metadata filtering that allows combining vector similarity with traditional attribute filters, and namespace or collection isolation for separating different knowledge bases within the same database.

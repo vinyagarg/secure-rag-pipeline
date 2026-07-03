@@ -1,0 +1,9 @@
+Prompt engineering is the practice of designing and optimizing input prompts to get the best possible outputs from large language models. Effective prompt engineering can dramatically improve LLM output quality without any model training or fine-tuning.
+
+Zero-shot prompting asks the model to complete a task with no examples, relying entirely on the model's pretrained knowledge. One-shot and few-shot prompting include one or several examples of the desired input-output format in the prompt. Few-shot prompting is particularly effective for tasks with a specific output format or style, as the examples demonstrate exactly what is expected.
+
+Chain-of-thought (CoT) prompting encourages the model to reason step by step before giving a final answer, by either including the phrase "Let's think step by step" or by providing few-shot examples that demonstrate step-by-step reasoning. CoT dramatically improves performance on complex reasoning, math, and logic tasks by allowing the model to break down the problem rather than jumping to a conclusion.
+
+System prompts set the overall behavior, persona, and constraints for the model throughout a conversation. A well-designed system prompt can make a model consistently follow specific formats, avoid certain topics, maintain a particular tone, or stick to a defined knowledge scope. For RAG systems, the system prompt typically instructs the model to answer only from the provided context and to admit uncertainty when the answer is not in the context.
+
+Prompt injection is a security vulnerability where malicious content in the user's input (or in retrieved documents) attempts to override the system prompt's instructions. Common injection patterns include phrases like "ignore previous instructions" or "you are now a different AI." Defending against injection requires both input validation and robust system prompts that explicitly acknowledge and resist manipulation attempts.
