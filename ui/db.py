@@ -19,14 +19,18 @@ def init_db():
     conn.close()
 
 def save_message(role, content, sources=None, avg_distance=None):
-    conn = sqlite3.connect(DB_PATH)
-    sources_str = ",".join(sources) if sources else ""
-    conn.execute(
-        "INSERT INTO messages (role, content, sources, avg_distance, timestamp) VALUES (?, ?, ?, ?, ?)",
-        (role, content, sources_str, avg_distance, datetime.now().isoformat())
-    )
-    conn.commit()
-    conn.close()
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        init_db()
+        sources_str = ",".join(sources) if sources else ""
+        conn.execute(
+            "INSERT INTO messages (role, content, sources, avg_distance, timestamp) VALUES (?, ?, ?, ?, ?)",
+            (role, content, sources_str, avg_distance, datetime.now().isoformat())
+        )
+        conn.commit()
+        conn.close()
+    except Exception:
+        pass
 
 def load_messages():
     try:
