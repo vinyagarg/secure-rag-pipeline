@@ -1,6 +1,8 @@
-# 🛡️ RAGuard
+<h1 align="center">🛡️ RAGuard</h1>
 
-> **Smart enough to answer. Smart enough to know when not to.**
+<p align="center">
+  <em><strong>Smart enough to answer. Smart enough to know when not to.</strong></em>
+</p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white" />
