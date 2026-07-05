@@ -32,18 +32,18 @@ export function Sidebar({ onSuggestedQuestion }: SidebarProps) {
             </span>
           )}
         </div>
-        <p className="text-[#333] text-xs">AI assistant grounded in source documents</p>
+        <p className="text-[#666] text-xs">AI assistant grounded in source documents</p>
       </div>
 
       <div className="flex-1 overflow-y-auto p-3">
-        <p className="text-[#333] text-xs uppercase tracking-wider font-medium px-1 mb-3">
+        <p className="text-[#555] text-xs uppercase tracking-wider font-medium px-1 mb-3">
           Suggested
         </p>
         {suggestedQuestions.map((q, i) => (
           <button
             key={i}
             onClick={() => onSuggestedQuestion(q)}
-            className="w-full text-left px-3 py-2 rounded bg-transparent hover:bg-[#141414] border border-transparent hover:border-[#1a1a1a] text-[#555] hover:text-[#e0e0e0] text-xs leading-tight transition-all mb-1"
+            className="w-full text-left px-3 py-2 rounded bg-transparent hover:bg-[#141414] border border-transparent hover:border-[#1a1a1a] text-[#999] hover:text-[#e0e0e0] text-xs leading-tight transition-all mb-1"
           >
             {q}
           </button>
@@ -53,17 +53,17 @@ export function Sidebar({ onSuggestedQuestion }: SidebarProps) {
       <div className="p-3 border-t border-[#1a1a1a] space-y-2">
         <button
           onClick={() => clearMessages()}
-          className="w-full px-3 py-2 rounded bg-transparent hover:bg-[#141414] border border-[#1a1a1a] text-[#555] hover:text-[#e0e0e0] text-xs font-medium transition-all"
+          className="w-full px-3 py-2 rounded bg-transparent hover:bg-[#141414] border border-[#1a1a1a] text-[#999] hover:text-[#e0e0e0] text-xs font-medium transition-all"
         >
           Clear conversation
         </button>
         <button
           onClick={() => { clearMessages(); logout() }}
-          className="w-full px-3 py-2 rounded bg-transparent hover:bg-[#141414] border border-[#1a1a1a] text-[#555] hover:text-[#e0e0e0] text-xs font-medium transition-all"
+          className="w-full px-3 py-2 rounded bg-transparent hover:bg-[#141414] border border-[#1a1a1a] text-[#999] hover:text-[#e0e0e0] text-xs font-medium transition-all"
         >
           Sign out
         </button>
-        <p className="text-[#1e1e1e] text-xs text-center pt-1">
+        <p className="text-[#444] text-xs text-center pt-1">
           FastAPI · ChromaDB · Llama 3.3
         </p>
       </div>
