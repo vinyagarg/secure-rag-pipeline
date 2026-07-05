@@ -1,2 +1,2 @@
-\*\*Status:\*\* Complete ✅ — deployed with 616-chunk AI engineering knowledge base
+🔗 \*\*App:\*\* https://secure-rag-pipeline.vercel.app (User: user123 | Admin: admin123)
 
