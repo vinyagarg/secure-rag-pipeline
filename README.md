@@ -2,25 +2,43 @@
 
 
 
-> \*\*Smart enough to answer. Smart enough to know when not to.\*\*
+> \*\*A secure Retrieval-Augmented Generation (RAG) pipeline that answers only from trusted documents—and knows when to say "I don't know."\*\*
 
 
 
 \[!\[Python](https://img.shields.io/badge/Python-3.11-blue?style=flat-square\&logo=python\&logoColor=white)](https://python.org)
 
-\[!\[FastAPI](https://img.shields.io/badge/FastAPI-backend-green?style=flat-square\&logo=fastapi)](https://raguard-api.onrender.com/docs)
+\[!\[FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?style=flat-square\&logo=fastapi)](https://raguard-api.onrender.com/docs)
 
-\[!\[Next.js](https://img.shields.io/badge/Next.js-frontend-black?style=flat-square\&logo=next.js)](https://secure-rag-pipeline.vercel.app)
+\[!\[Next.js](https://img.shields.io/badge/Next.js-Frontend-black?style=flat-square\&logo=next.js)](https://secure-rag-pipeline.vercel.app)
 
-\[!\[License](https://img.shields.io/badge/license-MIT-gray?style=flat-square)](LICENSE)
+\[!\[License](https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square)](LICENSE)
 
 
 
-\*\*\[Live Demo](https://secure-rag-pipeline.vercel.app)\*\* \&nbsp;·\&nbsp; \*\*\[API Docs](https://raguard-api.onrender.com/docs)\*\*
+\## 🚀 Live Demo
 
-<br>
 
-Demo credentials \&nbsp;→\&nbsp; User: `user123` \&nbsp;·\&nbsp; Admin: `admin123`
+
+🌐 \*\*Frontend:\*\* https://secure-rag-pipeline.vercel.app
+
+
+
+📖 \*\*API Documentation:\*\* https://raguard-api.onrender.com/docs
+
+
+
+\### Demo Credentials
+
+
+
+| Role | Username |
+
+|------|----------|
+
+| User | `user123` |
+
+| Admin | `admin123` |
 
 
 
@@ -28,15 +46,37 @@ Demo credentials \&nbsp;→\&nbsp; User: `user123` \&nbsp;·\&nbsp; Admin: `admi
 
 
 
-\## Overview
+\# 📖 Overview
 
 
 
-RAGuard is a production-grade Retrieval-Augmented Generation system that goes beyond basic retrieve-and-generate. It answers questions grounded in real source documents — and when it doesn't know, it says so.
+RAGuard is a production-ready Retrieval-Augmented Generation system focused on \*\*security, reliability, and transparency\*\*.
 
 
 
-Built with security, evaluation, and observability as core features — not afterthoughts.
+Unlike traditional RAG systems that attempt to answer every question, RAGuard answers \*\*only when sufficient evidence exists\*\* in the retrieved documents. Every response passes through multiple validation stages, ensuring it is grounded, sanitized, and fully traceable.
+
+
+
+\### Key Features
+
+
+
+\- 🔒 Multi-layer input and output guardrails
+
+\- 📚 Retrieval using semantic vector search (ChromaDB)
+
+\- 🤖 Grounded answer generation with Llama 3.3 70B
+
+\- ✅ LLM-based grounding verification
+
+\- 📊 Built-in evaluation framework
+
+\- 📝 Complete audit logging for every request
+
+\- 🐳 Dockerized deployment
+
+\- ⚡ FastAPI backend with Next.js frontend
 
 
 
@@ -44,59 +84,103 @@ Built with security, evaluation, and observability as core features — not afte
 
 
 
-\## Architecture
+\# 🏗️ System Architecture
 
 
+
+```text
+
+&#x20;                User Query
+
+&#x20;                     │
+
+&#x20;                     ▼
+
+&#x20;       Pattern-based Input Guardrail
+
+&#x20;                     │
+
+&#x20;                     ▼
+
+&#x20;       LLM Intent Classification
+
+&#x20;                     │
+
+&#x20;                     ▼
+
+&#x20;     ChromaDB Semantic Retrieval
+
+&#x20;          (616 document chunks)
+
+&#x20;                     │
+
+&#x20;                     ▼
+
+&#x20;      Llama 3.3 70B Generation
+
+&#x20;                     │
+
+&#x20;                     ▼
+
+&#x20;    Output Guardrail (PII Filtering)
+
+&#x20;                     │
+
+&#x20;                     ▼
+
+&#x20;     LLM Grounding Verification
+
+&#x20;          (Faithfulness Score)
+
+&#x20;                     │
+
+&#x20;                     ▼
+
+&#x20;     SQLite Audit Logging
+
+&#x20;                     │
+
+&#x20;                     ▼
+
+&#x20;             Final Response
 
 ```
 
-Query
-
-&#x20; → Input Guardrail    (pattern matching)
-
-&#x20; → Input Guardrail    (LLM intent classifier)
-
-&#x20; → Retriever          (ChromaDB · 616 chunks)
-
-&#x20; → Generator          (Llama 3.3 70B · grounded)
-
-&#x20; → Output Guardrail   (PII + sanitization)
-
-&#x20; → Grounding Check    (LLM-as-judge · 1–5 score)
-
-&#x20; → Audit Logger       (SQLite · every request traced)
-
-&#x20; → Response
-
-```
-
 
 
 \---
 
 
 
-\## Evaluation
+\# 📊 Evaluation
 
 
 
-> All metrics are reproducible — run `python eval/run\_eval.py` anytime.
+All metrics are fully reproducible.
+
+
+
+```bash
+
+python eval/run\_eval.py
+
+```
 
 
 
 | Metric | Result |
 
-|---|---|
+|---------|--------|
 
 | Retrieval Recall@3 | \*\*100%\*\* (15/15 golden questions) |
 
-| Answer Relevance | \*\*4.93 / 5\*\* |
+| Answer Relevance | \*\*4.93 / 5.00\*\* |
 
-| Answer Faithfulness | \*\*4.67 / 5\*\* |
+| Answer Faithfulness | \*\*4.67 / 5.00\*\* |
 
-| Consistency across 3 runs | \*\*0.997 / 1.0\*\* |
+| Consistency (3 runs) | \*\*0.997 / 1.00\*\* |
 
-| Guardrail test suite | \*\*7 / 7 passing\*\* |
+| Guardrail Test Suite | \*\*7 / 7 Passing\*\* |
 
 
 
@@ -104,29 +188,33 @@ Query
 
 
 
-\## Stack
+\# 🛠️ Tech Stack
 
 
 
 | Layer | Technology |
 
-|---|---|
+|--------|------------|
 
-| Frontend | React · Next.js · Vercel |
+| Frontend | Next.js, React |
 
-| Backend | FastAPI · Uvicorn · Render |
+| Backend | FastAPI, Uvicorn |
 
-| Embeddings | Jina AI (jina-embeddings-v3) |
+| LLM | Llama 3.3 70B (Groq) |
 
-| Vector Store | ChromaDB |
+| Embeddings | Jina Embeddings v3 |
 
-| LLM | Llama 3.3 70B via Groq API |
+| Vector Database | ChromaDB |
 
-| Logging | SQLite audit log |
+| Evaluation | LLM-as-Judge |
 
-| Container | Docker |
+| Logging | SQLite |
 
-| Testing | pytest |
+| Testing | Pytest |
+
+| Deployment | Render, Vercel |
+
+| Containerization | Docker |
 
 
 
@@ -134,51 +222,239 @@ Query
 
 
 
-\## Quickstart
+\# ⚡ Quick Start
+
+
+
+\## Clone the repository
 
 
 
 ```bash
 
-git clone https://github.com/vinyagarg/secure-rag-pipeline
+git clone https://github.com/vinyagarg/secure-rag-pipeline.git
+
+
 
 cd secure-rag-pipeline
 
-pip install -r requirements.txt
-
-cp .env.example .env                    # Add GROQ\_API\_KEY and JINA\_API\_KEY
-
-python retrieval/build\_index.py         # Build vector index
-
-uvicorn api.main:app --reload           # Start API on :8000
-
 ```
+
+
+
+\## Install dependencies
 
 
 
 ```bash
 
-\# Frontend
+pip install -r requirements.txt
+
+```
+
+
+
+\## Configure environment variables
+
+
+
+```bash
+
+cp .env.example .env
+
+```
+
+
+
+Add:
+
+
+
+```
+
+GROQ\_API\_KEY=your\_key
+
+JINA\_API\_KEY=your\_key
+
+```
+
+
+
+\## Build the vector index
+
+
+
+```bash
+
+python retrieval/build\_index.py
+
+```
+
+
+
+\## Run the backend
+
+
+
+```bash
+
+uvicorn api.main:app --reload
+
+```
+
+
+
+API will be available at:
+
+
+
+```
+
+http://localhost:8000
+
+```
+
+
+
+\---
+
+
+
+\# 💻 Frontend
+
+
+
+```bash
 
 cd frontend
 
+
+
 npm install
 
-npm run dev                             # Start UI on :3000
+
+
+npm run dev
 
 ```
+
+
+
+Frontend runs at:
+
+
+
+```
+
+http://localhost:3000
+
+```
+
+
+
+\---
+
+
+
+\# 🧪 Evaluation
+
+
+
+Run the complete evaluation suite:
 
 
 
 ```bash
 
-\# Evaluation
-
-python eval/run\_eval.py                 # Full eval suite + quality gates
-
-pytest tests/ -v                        # 7 guardrail tests
+python eval/run\_eval.py
 
 ```
+
+
+
+Run unit tests:
+
+
+
+```bash
+
+pytest tests -v
+
+```
+
+
+
+\---
+
+
+
+\# 📁 Project Structure
+
+
+
+```text
+
+secure-rag-pipeline
+
+│
+
+├── api/
+
+├── frontend/
+
+├── retrieval/
+
+├── eval/
+
+├── tests/
+
+├── logs/
+
+├── chroma\_db/
+
+├── requirements.txt
+
+└── README.md
+
+```
+
+
+
+\---
+
+
+
+\# 🔒 Security Features
+
+
+
+\- Pattern-based prompt injection detection
+
+\- LLM intent classification
+
+\- Retrieval grounding
+
+\- Hallucination detection
+
+\- Output sanitization
+
+\- PII filtering
+
+\- Audit logging
+
+\- Confidence scoring
+
+
+
+\---
+
+
+
+\# 📄 License
+
+
+
+This project is licensed under the MIT License.
 
 
 
@@ -188,7 +464,7 @@ pytest tests/ -v                        # 7 guardrail tests
 
 <p align="center">
 
-&#x20; <sub>Python · FastAPI · React · ChromaDB · Llama 3.3 · Docker · Render · Vercel</sub>
+Built with ❤️ using Python • FastAPI • ChromaDB • Llama 3.3 • Next.js • Docker
 
 </p>
 
