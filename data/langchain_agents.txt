@@ -1,0 +1,11 @@
+Source: https://python.langchain.com/docs/concepts/agents/
+
+Agents in LangChain use a language model as a reasoning engine to decide what sequence of actions to take to accomplish a goal. Unlike a chain with a fixed sequence of steps, an agent dynamically decides which tools to call and in what order, based on the model's reasoning about the current state of the task.
+
+The core agent loop consists of three steps repeated until completion. First, the model receives the current state — the original task plus any observations from previous tool calls — and decides what to do next. Second, if the model decides to call a tool, the tool is executed and its output becomes an observation. Third, the observation is added to the state and the model reasons again. This loop continues until the model decides it has enough information to give a final answer.
+
+ReAct (Reasoning and Acting) is the most common agent framework. In ReAct, the model interleaves reasoning steps — explicit thoughts about what to do next and why — with action steps that execute tools. The explicit reasoning makes the agent's decision-making interpretable and helps catch errors earlier in the loop.
+
+Tools are functions that agents can call to interact with external systems. Common tools include web search for finding current information, code execution for computing results, database queries for retrieving structured data, and API calls for interacting with external services. Each tool has a name, description, and input schema that the model uses to decide when and how to call it.
+
+Agent reliability is the main engineering challenge. Agents can get stuck in loops, make wrong early decisions that cascade, or fail unpredictably when unexpected tool outputs occur. Production agent systems require maximum iteration limits, fallback behaviors for tool failures, and comprehensive logging of every reasoning and action step.

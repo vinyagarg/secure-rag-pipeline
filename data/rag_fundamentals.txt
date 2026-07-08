@@ -1,9 +1,0 @@
-Retrieval-Augmented Generation (RAG) is an AI framework that combines information retrieval with text generation. Instead of relying solely on an LLM's training data, RAG systems first retrieve relevant documents from an external knowledge base, then use those documents as context for generating accurate, grounded responses.
-
-The core RAG pipeline has five stages. First, document ingestion: raw documents are loaded and split into smaller chunks using text splitters. Second, embedding: each chunk is converted into a vector representation using an embedding model that captures semantic meaning. Third, storage: these vectors are stored in a vector database like ChromaDB, Pinecone, or FAISS that supports fast similarity search. Fourth, retrieval: when a user asks a question, the query is embedded and the most semantically similar chunks are retrieved from the vector store. Fifth, generation: the retrieved chunks are passed as context to an LLM, which generates a grounded answer.
-
-RAG solves several key problems with pure LLM generation. LLMs have a knowledge cutoff and cannot access real-time or proprietary information. RAG allows LLMs to answer questions about documents they were never trained on. RAG also reduces hallucination by forcing the model to ground its answers in retrieved facts rather than relying on potentially incorrect memorized knowledge.
-
-The main variations of RAG include naive RAG (basic retrieve-then-generate), advanced RAG (with query rewriting, reranking, and hybrid search), and modular RAG (with routing, fusion, and adaptive retrieval). Each variation trades off complexity for accuracy and latency.
-
-Common failure modes in RAG systems include retrieval failures (the right document is not retrieved due to vocabulary mismatch or poor chunking), generation failures (the LLM ignores or misrepresents the retrieved context), and context window overflow (too many retrieved chunks exceed the LLM's context limit).

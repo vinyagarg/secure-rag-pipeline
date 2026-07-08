@@ -1,0 +1,9 @@
+Source: https://python.langchain.com/docs/concepts/streaming/
+
+Streaming allows language model outputs to be processed as they are generated, token by token, rather than waiting for the complete response. This dramatically improves perceived latency for users because they see the first tokens of the response within seconds rather than waiting 5-30 seconds for a complete answer.
+
+LangChain supports streaming through two interfaces. The stream method returns an iterator that yields tokens as they are generated, suitable for use in synchronous code. The astream method returns an async iterator for use with async frameworks like FastAPI, allowing the server to handle other requests while waiting for model output.
+
+In RAG pipelines, streaming is applied to the generation step since retrieval happens synchronously before generation. A common pattern is to retrieve relevant documents synchronously, then stream the generation step to the client. The sources and metadata can be sent before the streamed content begins, giving users immediate feedback on what documents informed the answer.
+
+Server-Sent Events (SSE) and WebSockets are the two common protocols for delivering streaming responses to web frontends. FastAPI supports SSE natively through the StreamingResponse class, making it straightforward to expose a streaming LangChain endpoint. The frontend receives tokens as they arrive and appends them to the displayed response in real time, creating the characteristic typewriter effect seen in ChatGPT and similar interfaces.

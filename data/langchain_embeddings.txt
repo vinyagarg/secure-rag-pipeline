@@ -1,0 +1,9 @@
+Source: https://python.langchain.com/docs/concepts/embedding_models/
+
+Embedding models convert text into dense numerical vectors that capture semantic meaning. Two texts with similar meanings will have embedding vectors that are close together in the high-dimensional vector space, even if they use completely different words. This property makes embeddings the foundation of semantic search, clustering, and retrieval-augmented generation.
+
+LangChain provides a standardized Embeddings interface with two methods: embed_documents for embedding a list of texts during indexing, and embed_query for embedding a single query string at retrieval time. In some embedding models, documents and queries use different prompts internally, so these methods must be used correctly.
+
+Popular embedding models supported in LangChain include OpenAI text-embedding-3-small and text-embedding-3-large, which offer high quality but require API calls. HuggingFace sentence-transformers models like all-MiniLM-L6-v2 are free, open-source, and run locally without API dependency. Jina AI provides free API-based embeddings with strong multilingual support. Cohere provides embeddings with built-in reranking capabilities.
+
+Embedding dimensionality matters: higher dimensions capture more nuance but require more storage and computation. The embedding model must be consistent between indexing and retrieval — if documents are indexed with one model, all queries must be embedded with the same model. Switching models requires rebuilding the entire vector index from scratch.

@@ -1,0 +1,9 @@
+Source: https://python.langchain.com/docs/concepts/vectorstores/
+
+Vector stores are databases optimized for storing and retrieving vector embeddings. In LangChain, vector stores are a core component for building retrieval systems that enable semantic search — finding documents by meaning rather than exact keyword match.
+
+A vector store accepts documents, embeds them using an embedding model, and stores both the text and its embedding. At query time, the query is embedded using the same model and the store returns the k most similar document embeddings along with their text content. Similarity is most commonly measured using cosine similarity.
+
+LangChain supports many vector store providers including ChromaDB for local development, Pinecone for cloud-scale deployments, FAISS for in-memory search, Weaviate and Qdrant for open-source self-hosted deployments, and PGVector for PostgreSQL-based storage. Each has different tradeoffs in terms of scalability, persistence, filtering capability, and ease of setup.
+
+The VectorStore interface in LangChain exposes common methods: add_documents for adding new documents to the store, similarity_search for retrieving the top-k most similar documents to a query, and as_retriever for converting the vector store into a retriever that can be used in a RAG chain. The as_retriever method also supports filtering by metadata, allowing retrieval to be constrained to specific document types, dates, or categories.

@@ -1,0 +1,9 @@
+Source: https://python.langchain.com/docs/concepts/structured_outputs/
+
+Structured outputs allow language models to return data in a predefined format — typically JSON conforming to a schema — rather than free-form text. This makes it straightforward to use LLM outputs programmatically: parsing, validating, and passing to downstream systems without complex string manipulation.
+
+LangChain's with_structured_output method adds structured output capability to any chat model that supports it. The method accepts either a Pydantic model or a JSON Schema definition that specifies the expected structure. The model is instructed to return output conforming to this schema, and LangChain automatically parses and validates the response.
+
+Function calling (also called tool calling) is the mechanism most models use to implement structured outputs. The schema is passed to the model as a function definition, and the model's response includes a structured call to that function with the extracted values. This is more reliable than instructing the model to return JSON in its text response because function calling is handled at the model API level.
+
+Structured outputs are used in RAG systems for several purposes. Classification of query intent before retrieval helps route to the right retrieval strategy. Extraction of specific entities or facts from retrieved documents produces structured data for downstream processing. Grading of retrieved document relevance allows filtering poor-quality chunks before they reach the generation step. Self-evaluation of generated answers enables automated quality checking.

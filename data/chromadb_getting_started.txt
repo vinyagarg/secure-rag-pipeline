@@ -1,0 +1,24 @@
+Source: https://docs.trychroma.com/docs/overview/getting-started
+
+- Python
+- TypeScript
+- Rust
+For production, Chroma offers Chroma Cloud - a fast, scalable, and serverless database-as-a-service. Get started in 30 seconds - $5 in free credits included.
+Install with AI
+Give the following prompt to Claude Code, Cursor, Codex, or your favorite AI agent. It will quickly set you up with Chroma.Install Manually
+Create a collection
+Collections are where you’ll store your embeddings, documents, and any additional metadata. Collections index your embeddings and documents, and enable efficient retrieval and filtering. You can create a collection with a name:
+Python
+Add some text documents to the collection
+Chroma will store your text and handle embedding and indexing automatically. You can also customize the embedding model. You must provide unique string IDs for your documents.
+Python
+Query the collection
+You can query the collection with a list of query texts, and Chroma will return the n most similar results. It’s that easy!If n_results is not provided, Chroma will return 10 results by default. Here we only added 2 documents, so we set n_results=2.
+Python
+Inspect Results
+From the above - you can see that our query about hawaii is semantically most similar to the document about pineapple.
+Python
+Next steps
+In this guide we used Chroma’s in-memory client for simplicity. It starts a Chroma server in-memory, so any data you ingest will be lost when your program terminates. You can use the persistent client or run Chroma in client-server mode if you need data persistence.- Learn how to Deploy Chroma to a server
+- Join Chroma’s Discord Community to ask questions and get help
+- Follow Chroma on X (@trychroma) for updates

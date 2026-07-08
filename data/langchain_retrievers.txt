@@ -1,0 +1,9 @@
+Source: https://python.langchain.com/docs/concepts/retrievers/
+
+Retrievers in LangChain are components that return relevant documents from a knowledge base given a query. The base Retriever interface exposes an invoke method that takes a string query and returns a list of Document objects. Vector store retrievers are the most common type, wrapping a vector store's similarity search to enable it to work in LangChain chains and agents.
+
+Beyond simple vector store retrieval, LangChain supports more advanced retrieval patterns. MultiQueryRetriever generates multiple phrasings of the original query and retrieves documents for each, then merges and deduplicates the results. This helps overcome vocabulary mismatch where the original query phrasing misses relevant documents that use different terminology.
+
+ContextualCompressionRetriever adds a post-processing step where retrieved documents are compressed or filtered to remove irrelevant content before being passed to the LLM. This reduces noise in the context and improves generation quality, especially when full document chunks contain a mix of relevant and irrelevant information.
+
+BM25Retriever provides keyword-based retrieval that complements semantic search by capturing exact term matches. Combining BM25 and vector search — called hybrid search — gives better results than either alone: semantic search understands meaning while BM25 ensures important specific terms are captured. EnsembleRetriever makes hybrid search easy by combining multiple retrievers with configurable weights.

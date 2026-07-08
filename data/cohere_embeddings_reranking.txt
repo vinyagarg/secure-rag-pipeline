@@ -1,0 +1,11 @@
+Source: https://docs.cohere.com/docs/embeddings
+
+Cohere provides embedding models and reranking models that work together to build high-performance retrieval systems. The embedding models convert text into vector representations for similarity search, while the reranking model re-scores retrieved candidates to surface the most relevant results.
+
+Cohere's embed-v4.0 model supports multimodal inputs including text and images, enabling retrieval across different data types. The model produces embeddings optimized for semantic similarity search and supports multiple input types: search_document for content being indexed, search_query for query-time embedding, classification for text classification tasks, and clustering for grouping similar documents.
+
+Reranking is a two-stage retrieval approach that significantly improves precision without sacrificing recall. In the first stage, fast approximate retrieval (using a vector database) returns a large set of candidates — typically 50 to 100. In the second stage, a cross-encoder reranking model scores each candidate against the original query using deeper attention between query and document. The reranker returns a ranked list where the most relevant documents are at the top.
+
+Why two stages instead of just using the reranker directly? Cross-encoder models that compare query and document together are too slow to run against an entire corpus at query time — they require a forward pass for every document. But they are significantly more accurate than bi-encoder embedding models that embed query and document independently. The two-stage approach uses fast approximate retrieval for recall and the slower but more accurate reranker for precision.
+
+The combination of Cohere's embedding model for retrieval and Rerank model for post-processing consistently achieves higher retrieval quality than embedding search alone, particularly on queries with complex intent or domain-specific terminology where surface-form similarity is a poor proxy for relevance.

@@ -1,0 +1,11 @@
+Source: https://www.pinecone.io/learn/chunking-strategies/
+
+Chunking is the process of dividing documents into smaller pieces for embedding and retrieval. The chunking strategy chosen has one of the largest impacts on RAG system performance because it determines the granularity, coherence, and completeness of what gets retrieved in response to a query.
+
+Fixed-size chunking divides text into chunks of a specific number of tokens or characters, with an optional overlap between consecutive chunks. It is simple, predictable, and computationally inexpensive. Overlap between chunks (typically 10-15% of chunk size) reduces the risk of splitting important content across chunk boundaries. The main weakness is that fixed-size chunks may cut sentences or ideas in the middle, reducing semantic coherence.
+
+Sentence-window chunking embeds individual sentences for retrieval but returns a window of surrounding sentences as context to the LLM. This combines precise retrieval granularity with richer generation context, addressing the tradeoff between retrieval precision and context completeness. The sentence is the retrieval unit; the window is the generation unit.
+
+Semantic chunking uses embedding similarity to determine split points. Adjacent sentences are merged into the same chunk as long as their embedding similarity exceeds a threshold. When similarity drops — indicating a topic change — a new chunk is started. This produces chunks that are semantically coherent rather than arbitrarily truncated, but requires embedding computation during the chunking step and is more expensive.
+
+Document-structure-aware chunking respects the inherent structure of the source material. For markdown documents, splitting by headers keeps sections together. For code, splitting by function or class boundaries keeps logical units intact. For PDFs, splitting by detected paragraphs or sections preserves the author's intended organization. When source structure is reliable, structure-aware chunking consistently outperforms character-based chunking.

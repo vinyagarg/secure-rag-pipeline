@@ -1,0 +1,11 @@
+Source: https://python.langchain.com/docs/concepts/evaluation/
+
+Evaluation in LangChain refers to the process of assessing the performance of LLM applications. Because language model outputs are not exactly right or wrong but fall on a spectrum of quality, evaluation requires different approaches than traditional software testing.
+
+String evaluators compare an output string to a reference string or evaluate it against a set of criteria without a reference. CriteriaEvalChain evaluates outputs against defined criteria such as conciseness, relevance, correctness, or harmlessness, using an LLM as the judge. This enables evaluation without labeled datasets, which is crucial for domains where ground-truth labels are expensive to create.
+
+The LLM-as-judge approach is now standard practice in the industry. A separate, often more capable model evaluates the output of the model under test on a defined rubric. Research shows that LLM judge scores correlate with human evaluations at 0.85-0.90 Pearson correlation on most benchmarks, making them a practical substitute for expensive human evaluation at scale.
+
+For RAG systems specifically, the key evaluation dimensions are retrieval quality and generation quality. Retrieval quality is measured using Precision@k (what fraction of retrieved documents are relevant) and Recall@k (what fraction of relevant documents were retrieved). Generation quality is measured using faithfulness (does the answer only make claims supported by the retrieved context) and answer relevance (does the answer address the question asked). The RAGAS framework automates these metrics for RAG systems.
+
+Regression testing is critical for production systems. Every pipeline change — new embedding model, different chunk size, modified system prompt — must be validated against a fixed golden evaluation set before deployment. Automated quality gates that block deployment if any metric drops below a threshold prevent quality regressions from reaching users.

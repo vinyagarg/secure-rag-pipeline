@@ -2,43 +2,55 @@
 build_index.py — builds and saves the ChromaDB vector index using Jina AI embeddings API.
 Run once after adding/changing documents in the data/ folder.
 """
-import os
 import sys
-import requests as req
-from dotenv import load_dotenv
+import os
 sys.path.append("ingestion")
 from ingest import load_documents, chunk_text
+from dotenv import load_dotenv
+import requests as req
 import chromadb
 
 load_dotenv()
 JINA_API_KEY = os.getenv("JINA_API_KEY")
 
-def get_embeddings(texts: list[str]) -> list[list[float]]:
+def get_embeddings(texts):
     response = req.post(
         "https://api.jina.ai/v1/embeddings",
         headers={
             "Authorization": f"Bearer {JINA_API_KEY}",
             "Content-Type": "application/json"
         },
-        json={
-            "model": "jina-embeddings-v3",
-            "input": texts
-        }
+        json={"model": "jina-embeddings-v3", "input": texts}
     )
     data = response.json()
     if "data" not in data:
         raise ValueError(f"Jina API error: {data}")
     return [item["embedding"] for item in data["data"]]
 
+def extract_url(text):
+    """Extract real URL from first line of document."""
+    lines = text.strip().split("\n")
+    for line in lines[:3]:
+        line = line.strip()
+        if line.startswith("Source: http"):
+            return line.replace("Source: ", "").strip()
+    return ""
+
 def build_index():
     print("Loading documents...")
     docs = load_documents()
     all_chunks = []
-    for doc in docs:
-        for chunk in chunk_text(doc["text"]):
-            all_chunks.append({"source": doc["filename"], "text": chunk})
 
-    print(f"Getting embeddings for {len(all_chunks)} chunks via Jina API...")
+    for doc in docs:
+        url = extract_url(doc["text"])
+        for chunk in chunk_text(doc["text"]):
+            all_chunks.append({
+                "source": doc["filename"],
+                "url": url,
+                "text": chunk
+            })
+
+    print(f"Embedding {len(all_chunks)} chunks via Jina API...")
     texts = [c["text"] for c in all_chunks]
 
     batch_size = 8
@@ -60,9 +72,19 @@ def build_index():
         ids=[str(i) for i in range(len(all_chunks))],
         embeddings=all_embeddings,
         documents=texts,
-        metadatas=[{"source": c["source"]} for c in all_chunks]
+        metadatas=[{
+            "source": c["source"],
+            "url": c["url"]
+        } for c in all_chunks]
     )
-    print(f"Index built and saved to ./chroma_db with {len(all_chunks)} chunks.")
+
+    # Verify URLs are stored
+    print("\nVerifying URL storage...")
+    sample = collection.get(ids=["0", "1", "2"])
+    for meta in sample["metadatas"]:
+        print(f"  source: {meta['source']} | url: {meta.get('url', 'MISSING')[:60]}")
+
+    print(f"\nIndex built with {len(all_chunks)} chunks.")
 
 if __name__ == "__main__":
     build_index()

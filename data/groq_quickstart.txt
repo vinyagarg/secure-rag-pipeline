@@ -1,0 +1,29 @@
+Source: https://console.groq.com/docs/quickstart
+
+Get up and running with the Groq API in a few minutes, with the steps below.
+For additional support, catch our onboarding video.
+Please visit here to create an API Key.
+Configure your API key as an environment variable. This approach streamlines your API usage by eliminating the need to include your API key in each request. Moreover, it enhances security by minimizing the risk of inadvertently including your API key in your codebase.
+export GROQ_API_KEY=<your-api-key-here>pip install groqimport os
+from groq import Groq
+client = Groq(
+    api_key=os.environ.get("GROQ_API_KEY"),
+)
+chat_completion = client.chat.completions.create(
+    messages=[
+        {
+            "role": "user",
+            "content": "Explain the importance of fast language models",
+        }
+    ],
+    model="llama-3.3-70b-versatile",
+)
+print(chat_completion.choices[0].message.content)AI SDK is a Javascript-based open-source library that simplifies building large language model (LLM) applications. Documentation for how to use Groq on the AI SDK can be found here.
+First, install the ai package and the Groq provider @ai-sdk/groq:
+pnpm add ai @ai-sdk/groqThen, you can use the Groq provider to generate text. By default, the provider will look for GROQ_API_KEY as the API key.
+import { groq } from '@ai-sdk/groq';
+import { generateText } from 'ai';
+const { text } = await generateText({
+  model: groq('llama-3.3-70b-versatile'),
+  prompt: 'Write a vegetarian lasagna recipe for 4 people.',
+});Now that you have successfully received a chat completion, you can try out the other endpoints in the API.

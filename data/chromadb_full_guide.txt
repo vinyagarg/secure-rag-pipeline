@@ -1,0 +1,13 @@
+Source: https://docs.trychroma.com/docs/overview/introduction
+
+ChromaDB is an open-source vector database designed for AI applications. It stores text documents alongside their vector embeddings and enables fast semantic similarity search. ChromaDB is the most popular choice for local RAG development due to its simplicity — it requires zero configuration to get started.
+
+Collections are the core concept in ChromaDB. A collection is a named group of embeddings with their associated documents and metadata. You create one using client.create_collection(name) and interact with it using add, query, get, update, and delete methods.
+
+Adding documents uses collection.add() with three required fields: ids (unique string identifiers for each document), documents (list of text strings), and optionally embeddings (if you want to provide your own) or metadatas (dictionaries for filtering). If embeddings are not provided, ChromaDB uses its default embedding function automatically.
+
+Querying uses collection.query(query_texts or query_embeddings, n_results). ChromaDB returns the n most similar documents along with their distances, ids, and metadata. Lower distance means higher similarity. ChromaDB uses cosine similarity by default for text embeddings.
+
+ChromaDB has two client types. The in-memory client chromadb.Client() stores data only for the session duration — data is lost when the program ends. The persistent client chromadb.PersistentClient(path) saves the database to disk and reloads automatically on the next run. Production RAG systems always use the persistent client so the vector index survives server restarts without needing to re-embed all documents.
+
+Metadata filtering enables combining vector search with attribute-based constraints. For example, you can retrieve only documents where the source field equals a specific website, or where a date field is within a range. This is passed as a where parameter to the query method using MongoDB-style filter syntax.

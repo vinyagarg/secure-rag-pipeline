@@ -1,9 +1,0 @@
-Fine-tuning and Retrieval-Augmented Generation (RAG) are two complementary approaches for adapting large language models to specific domains or tasks. Understanding when to use each approach, and how to combine them, is a key skill for production AI engineering.
-
-Fine-tuning involves training a pre-trained model on a domain-specific dataset to adjust its weights. After fine-tuning, the model's knowledge and style are permanently changed. Fine-tuning is effective for teaching the model a specific output format or writing style, improving performance on a narrow task where many examples exist, and reducing inference-time context length by baking knowledge into weights rather than passing it in the prompt.
-
-RAG retrieves relevant information at inference time and passes it as context, without modifying the model's weights. RAG is more appropriate when the knowledge base changes frequently, when you need to cite sources, when you have a large diverse knowledge base that cannot fit into a training dataset, or when you want to control what information the model uses on a per-query basis.
-
-The key tradeoff is that fine-tuning is better for style and format adaptation but requires expensive retraining whenever knowledge changes. RAG is better for factual question-answering over dynamic knowledge bases but requires maintaining an external index and increases inference latency due to retrieval.
-
-In practice, many production systems combine both: fine-tuning for style, persona, and instruction-following behavior, combined with RAG for grounding responses in up-to-date, domain-specific facts. For example, a customer support system might fine-tune a model to respond in the company's specific tone and format, then use RAG to ensure answers are based on the current product documentation rather than the model's training data.

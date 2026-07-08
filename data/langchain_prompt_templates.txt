@@ -1,0 +1,9 @@
+Source: https://python.langchain.com/docs/concepts/prompt_templates/
+
+Prompt templates in LangChain are reusable templates for generating prompts. They abstract the fixed parts of a prompt from the variable inputs, making it easy to create consistent prompts across an application and separate prompt design from application logic.
+
+PromptTemplate is the simplest type, accepting a template string with named variables in curly braces and a format method that substitutes values. ChatPromptTemplate handles chat model prompts, which consist of a sequence of messages with different roles: system (sets model behavior), human (user input), and AI (assistant responses). Most production RAG applications use ChatPromptTemplate with a system message that defines the grounding rules and a human message that includes the retrieved context and the question.
+
+A critical design decision is how to structure the system prompt for RAG grounding. The system prompt must clearly instruct the model to answer only from the provided context and to acknowledge when the answer is not available rather than guessing. Explicit negative instructions (do not make up information, do not use your training knowledge) generally outperform implicit instructions (use only the context) because they make the constraint more salient to the model.
+
+FewShotPromptTemplate adds example input-output pairs to the prompt to demonstrate the desired behavior. This is particularly effective when the output format is complex or when the task requires consistent stylistic choices that are hard to describe in instructions alone. Few-shot examples should be selected dynamically based on similarity to the current input for best results.

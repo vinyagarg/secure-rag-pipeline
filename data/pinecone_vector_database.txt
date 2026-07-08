@@ -1,0 +1,9 @@
+Source: https://www.pinecone.io/learn/vector-database/
+
+A vector database is a database system designed specifically to store and efficiently search high-dimensional vector embeddings. Traditional databases store exact values and search by exact matching or range queries. Vector databases store continuous-valued vectors and search by approximate similarity, finding vectors that are close in the embedding space to a query vector.
+
+The core operation is nearest neighbor search. Given a query vector — the embedding of a user's question — the database returns the k most similar vectors along with their associated metadata and original text. Similarity is computed using distance metrics, with cosine similarity being most common for text embeddings because it captures directional similarity regardless of vector magnitude.
+
+Approximate nearest neighbor (ANN) algorithms make vector search tractable at scale. Exact nearest neighbor search requires comparing the query against every stored vector, which is too slow for large databases. ANN algorithms like HNSW (Hierarchical Navigable Small World) and IVF (Inverted File Index) build index structures during ingestion that allow fast search by exploring only a subset of vectors at query time. HNSW achieves query times of milliseconds even across hundreds of millions of vectors with high recall.
+
+Metadata filtering combines vector similarity with traditional attribute constraints. For example, retrieving the most similar documents that were published after a certain date, or belong to a specific category, or come from a specific source. This is implemented by filtering candidates based on metadata before or after the vector search step. Pre-filtering (filter then search) works better when the filter is highly selective. Post-filtering (search then filter) works better when the filter is less selective and you need exactly k results after filtering.

@@ -1,0 +1,9 @@
+Source: https://python.langchain.com/docs/concepts/rag/
+
+Retrieval-Augmented Generation (RAG) is a technique for augmenting LLM knowledge with additional, often private or real-time, data. LLMs can reason about wide-ranging topics, but their knowledge is limited to public data up to a specific point in time. If you want to build AI applications that can reason about private data or data introduced after a model's cutoff date, you need to augment the knowledge of the model with the specific information it needs.
+
+RAG consists of two phases. The first phase is indexing: documents are loaded using document loaders, split into chunks using text splitters, and stored as vector embeddings in a vector store. The second phase is retrieval and generation: at runtime, a user query is embedded and the most relevant chunks are retrieved, then passed as context to the LLM for grounded generation.
+
+The key advantage of RAG over pure parametric generation is grounding — the model is constrained to answer from retrieved documents rather than from its training data alone. This reduces hallucination significantly, especially for domain-specific or time-sensitive questions. However, RAG is not a complete solution to hallucination: the model can still misread or slightly misrepresent the context it receives.
+
+Common failure modes include retrieval failures where the right document is not found due to vocabulary mismatch between the query and document, context stuffing where too many low-relevance chunks dilute the signal, and generation drift where the LLM ignores retrieved context and answers from training data instead. Addressing these failure modes requires careful chunking strategy, embedding model selection, retrieval evaluation, and output grounding verification.

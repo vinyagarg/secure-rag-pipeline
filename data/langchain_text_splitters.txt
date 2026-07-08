@@ -1,0 +1,9 @@
+Source: https://python.langchain.com/docs/concepts/text_splitters/
+
+Text splitters divide large documents into smaller chunks suitable for embedding and retrieval. Chunk size is one of the most impactful decisions in RAG system design because it determines the granularity and context of what gets retrieved.
+
+The RecursiveCharacterTextSplitter is LangChain's recommended default. It attempts to split on paragraph boundaries first, then sentence boundaries, then word boundaries, always trying to keep semantically related content together. Chunk size is specified in characters or tokens, with an overlap parameter that repeats some content from one chunk into the next to prevent important information from being lost at boundaries.
+
+Choosing chunk size involves a fundamental tradeoff. Small chunks (100-300 tokens) enable precise retrieval — the retrieved content closely matches the specific question asked. But small chunks can lose surrounding context that gives the answer meaning. Large chunks (500-1000 tokens) preserve context but may dilute relevance by including content unrelated to the specific question. Most production systems use chunks of 300-500 tokens with 50-100 token overlap as a starting point, then tune empirically based on retrieval quality evaluation.
+
+Semantic chunking is a more sophisticated approach that uses embedding similarity to determine split points, keeping content that belongs together in the same chunk. This is more computationally expensive than character-based splitting but produces more coherent chunks for complex documents. Document-aware splitting respects document structure like headings, paragraphs, and sections, which is particularly effective for structured documentation.

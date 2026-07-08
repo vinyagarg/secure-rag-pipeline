@@ -1,0 +1,13 @@
+Source: https://platform.openai.com/docs/guides/prompt-engineering/
+
+Prompt engineering is the practice of structuring inputs to language models to produce reliable, high-quality outputs. OpenAI's prompt engineering guide identifies six primary strategies for improving model results.
+
+The first strategy is writing clear and specific instructions. The model cannot read intent — it processes exactly what is written. Adding detail, specifying the desired output format, and explicitly stating what the model should not do all help. If the output is too long, ask for brevity. If it lacks depth, ask for expert-level analysis. Delimiters like triple backticks or XML tags clearly separate instructions from content, preventing instructions embedded in content from being treated as part of the task.
+
+The second strategy is providing reference text. When given authoritative source material, models make fewer fabrications. Instructing the model to answer using only the provided reference and to cite specific passages makes outputs more accurate and verifiable. This is the core principle behind retrieval-augmented generation.
+
+The third strategy is splitting complex tasks into simpler subtasks. Complex tasks that require many steps in a single prompt are more error-prone than decomposed tasks where each step is handled separately. For a RAG system, this means separating the retrieval step, the context formatting step, and the generation step rather than attempting all in a single prompt.
+
+The fourth strategy is using chain-of-thought reasoning. Asking the model to reason step by step before committing to an answer dramatically improves performance on complex tasks. This works because it prevents the model from anchoring to an incorrect answer before fully processing the problem. For grounding tasks, asking the model to find relevant quotes from the context before synthesizing an answer improves faithfulness.
+
+The fifth strategy is testing changes systematically. Intuitions about what will improve performance are frequently wrong. The only reliable way to improve prompt performance is to evaluate changes against a representative set of examples and measure the impact quantitatively.
