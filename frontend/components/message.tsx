@@ -174,16 +174,11 @@ export function MessageComponent({ message }: MessageComponentProps) {
                 {message.sources.map((source, idx) => (
                   <div key={idx}>
                     {source.startsWith('http') ? (
-                      
-                        href={source}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[#4F8BF9] hover:text-[#8AB4F8] text-xs break-all transition-colors"
-                      >
-                        ↗ {source}
+                      <a href={source} target="_blank" rel="noopener noreferrer" className="text-[#4F8BF9] hover:text-[#8AB4F8] text-xs break-all transition-colors">
+                        {'↗ ' + source}
                       </a>
                     ) : (
-                      <span className="text-[#555] text-xs">• {source}</span>
+                      <span className="text-[#555] text-xs">{'• ' + source}</span>
                     )}
                   </div>
                 ))}
