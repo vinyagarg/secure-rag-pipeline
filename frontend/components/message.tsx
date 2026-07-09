@@ -23,26 +23,26 @@ function getConfidenceLabel(level: ConfidenceLevel) {
   }
 }
 
-function renderMarkdown(text: string) {
-  const lines = text.split('\n')
-  const elements: JSX.Element[] = []
-  let i = 0
+function renderInline(line: string): React.ReactNode[] {
+  const parts = line.split(/(\*\*[^*]+\*\*|\*[^*]+\*|`[^`]+`)/)
+  return parts.map((part, idx) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <strong key={idx} className="text-white font-semibold">{part.slice(2, -2)}</strong>
+    }
+    if (part.startsWith('*') && part.endsWith('*') && part.length > 2 && !part.startsWith('**')) {
+      return <em key={idx} className="italic text-[#c0c0c0]">{part.slice(1, -1)}</em>
+    }
+    if (part.startsWith('`') && part.endsWith('`')) {
+      return <code key={idx} className="bg-[#1a1a1a] px-1.5 py-0.5 rounded text-[#a0a0a0] text-xs font-mono">{part.slice(1, -1)}</code>
+    }
+    return <span key={idx}>{part}</span>
+  })
+}
 
-  const renderInline = (line: string) => {
-    const parts = line.split(/(\*\*[^*]+\*\*|\*[^*]+\*|`[^`]+`)/)
-    return parts.map((part, idx) => {
-      if (part.startsWith('**') && part.endsWith('**')) {
-        return <strong key={idx} className="text-white font-semibold">{part.slice(2, -2)}</strong>
-      }
-      if (part.startsWith('*') && part.endsWith('*') && !part.startsWith('**')) {
-        return <em key={idx} className="italic text-[#c0c0c0]">{part.slice(1, -1)}</em>
-      }
-      if (part.startsWith('`') && part.endsWith('`')) {
-        return <code key={idx} className="bg-[#1a1a1a] px-1.5 py-0.5 rounded text-[#a0a0a0] text-xs font-mono">{part.slice(1, -1)}</code>
-      }
-      return <span key={idx}>{part}</span>
-    })
-  }
+function renderMarkdown(text: string): React.ReactNode[] {
+  const lines = text.split('\n')
+  const elements: React.ReactNode[] = []
+  let i = 0
 
   while (i < lines.length) {
     const line = lines[i]
@@ -52,71 +52,68 @@ function renderMarkdown(text: string) {
       continue
     }
 
-    // Heading
     if (line.startsWith('### ')) {
-      elements.push(<h3 key={i} className="text-[#e0e0e0] font-semibold text-sm mt-4 mb-1">{line.slice(4)}</h3>)
+      elements.push(<h3 key={i} className="text-[#e0e0e0] font-semibold text-sm mt-4 mb-1">{renderInline(line.slice(4))}</h3>)
       i++
       continue
     }
+
     if (line.startsWith('## ')) {
-      elements.push(<h2 key={i} className="text-[#e0e0e0] font-semibold text-sm mt-4 mb-2">{line.slice(3)}</h2>)
+      elements.push(<h2 key={i} className="text-[#e0e0e0] font-semibold text-sm mt-4 mb-2">{renderInline(line.slice(3))}</h2>)
       i++
       continue
     }
+
     if (line.startsWith('# ')) {
-      elements.push(<h1 key={i} className="text-[#e0e0e0] font-semibold text-base mt-4 mb-2">{line.slice(2)}</h1>)
+      elements.push(<h1 key={i} className="text-[#e0e0e0] font-semibold text-base mt-4 mb-2">{renderInline(line.slice(2))}</h1>)
       i++
       continue
     }
 
-    // Numbered list
-    if (/^\d+\.\s/.test(line)) {
-      const listItems: JSX.Element[] = []
-      while (i < lines.length && /^\d+\.\s/.test(lines[i])) {
-        const content = lines[i].replace(/^\d+\.\s/, '')
-        listItems.push(
-          <li key={i} className="text-[#c0c0c0] mb-1.5 leading-relaxed pl-1">
-            {renderInline(content)}
-          </li>
-        )
-        i++
-      }
-      elements.push(
-        <ol key={`ol-${i}`} className="list-decimal pl-5 my-2 space-y-0.5">
-          {listItems}
-        </ol>
-      )
-      continue
-    }
-
-    // Bullet list
-    if (line.startsWith('* ') || line.startsWith('- ')) {
-      const listItems: JSX.Element[] = []
-      while (i < lines.length && (lines[i].startsWith('* ') || lines[i].startsWith('- '))) {
-        const content = lines[i].slice(2)
-        listItems.push(
-          <li key={i} className="text-[#c0c0c0] mb-1 leading-relaxed pl-1">
-            {renderInline(content)}
-          </li>
-        )
-        i++
-      }
-      elements.push(
-        <ul key={`ul-${i}`} className="list-disc pl-5 my-2 space-y-0.5">
-          {listItems}
-        </ul>
-      )
-      continue
-    }
-
-    // Horizontal rule
     if (line.trim() === '---' || line.trim() === '***') {
       elements.push(<hr key={i} className="border-[#1a1a1a] my-3" />)
       i++
       continue
     }
 
-    // Regular paragraph
+    if (/^\d+\.\s/.test(line)) {
+      const listItems: React.ReactNode[] = []
+      while (i < lines.length && /^\d+\.\s/.test(lines[i])) {
+        const content = lines[i].replace(/^\d+\.\s/, '')
+        listItems.push(
+          <li key={i} className="text-[#c0c0c0] mb-2 leading-relaxed">
+            {renderInline(content)}
+          </li>
+        )
+        i++
+      }
+      elements.push(
+        <ol key={'ol' + i} className="list-decimal pl-5 my-3 space-y-1">
+          {listItems}
+        </ol>
+      )
+      continue
+    }
+
+    if (/^[\s]*[-*]\s/.test(line)) {
+      const listItems: React.ReactNode[] = []
+      while (i < lines.length && /^[\s]*[-*]\s/.test(lines[i])) {
+        const content = lines[i].replace(/^[\s]*[-*]\s/, '')
+        listItems.push(
+          <li key={i} className="text-[#c0c0c0] mb-1.5 leading-relaxed">
+            {renderInline(content)}
+          </li>
+        )
+        i++
+      }
+      elements.push(
+        <ul key={'ul' + i} className="list-disc pl-5 my-2 space-y-0.5">
+          {listItems}
+        </ul>
+      )
+      continue
+    }
+
     elements.push(
       <p key={i} className="text-[#c0c0c0] leading-relaxed mb-2">
         {renderInline(line)}
@@ -146,12 +143,10 @@ export function MessageComponent({ message }: MessageComponentProps) {
       <div className="text-lg mt-1 flex-shrink-0">🛡️</div>
       <div className="flex-1 min-w-0">
 
-        {/* Rendered markdown */}
         <div className="text-sm">
           {renderMarkdown(message.content)}
         </div>
 
-        {/* Confidence */}
         {message.confidence && (
           <div className="flex items-center gap-2 mt-3 mb-2">
             <div className={`w-2 h-2 rounded-full flex-shrink-0 ${getConfidenceColor(message.confidence)}`} />
@@ -159,7 +154,6 @@ export function MessageComponent({ message }: MessageComponentProps) {
           </div>
         )}
 
-        {/* Sources */}
         {message.sources && message.sources.length > 0 && (
           <div className="mt-2 text-xs">
             <button
@@ -167,7 +161,7 @@ export function MessageComponent({ message }: MessageComponentProps) {
               className="text-[#444] hover:text-[#888] flex items-center gap-1.5 transition-colors"
             >
               <span className="text-[10px]">{expandedSources ? '▼' : '▶'}</span>
-              <span>Sources ({message.sources.length})</span>
+              <span>{'Sources (' + message.sources.length + ')'}</span>
             </button>
             {expandedSources && (
               <div className="mt-2 space-y-1.5 pl-3 border-l border-[#1a1a1a]">
