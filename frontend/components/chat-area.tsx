@@ -111,20 +111,13 @@ export function ChatArea({
       <div className="shrink-0 border-t border-border bg-background">
         <div className="mx-auto w-full max-w-[760px] px-5 py-4">
           <div className="flex items-end gap-2 rounded-lg border border-border bg-card px-2 py-2 transition-colors focus-within:border-border-strong">
-            <button
-              onClick={onOpenUpload}
-              aria-label="Upload documents"
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-            >
-              <Paperclip size={16} />
-            </button>
             <textarea
               ref={textareaRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               rows={1}
-              placeholder="Ask about your documents…"
+              placeholder="Ask anything about RAG, LLMs, or AI engineering…"
               className="max-h-40 flex-1 resize-none bg-transparent py-1.5 text-[14px] leading-relaxed text-foreground outline-none placeholder:text-muted-foreground"
             />
             <button
