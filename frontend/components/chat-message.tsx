@@ -30,8 +30,13 @@ function TypingIndicator() {
   )
 }
 
-function ConfidenceBadge({ level }: { level: NonNullable<ChatMessage['confidence']> }) {
+function ConfidenceBadge({
+  level,
+}: {
+  level: NonNullable<ChatMessage['confidence']>
+}) {
   const meta = CONFIDENCE_META[level]
+
   return (
     <div className="flex items-center gap-1.5">
       <span
@@ -45,8 +50,13 @@ function ConfidenceBadge({ level }: { level: NonNullable<ChatMessage['confidence
   )
 }
 
-function Sources({ sources }: { sources: NonNullable<ChatMessage['sources']> }) {
+function Sources({
+  sources,
+}: {
+  sources: NonNullable<ChatMessage['sources']>
+}) {
   const [open, setOpen] = useState(false)
+
   if (sources.length === 0) return null
 
   return (
@@ -61,6 +71,7 @@ function Sources({ sources }: { sources: NonNullable<ChatMessage['sources']> }) 
         />
         {sources.length} {sources.length === 1 ? 'Source' : 'Sources'}
       </button>
+
       {open && (
         <ul className="flex flex-col gap-2 border-t border-border px-3 py-2.5">
           {sources.map((s, i) => (
@@ -74,6 +85,7 @@ function Sources({ sources }: { sources: NonNullable<ChatMessage['sources']> }) 
                 <LinkIcon size={11} className="shrink-0" />
                 {s.title}
               </a>
+
               <span className="pl-[18px] text-[11.5px] leading-relaxed text-muted-foreground">
                 {s.snippet}
               </span>
@@ -102,8 +114,16 @@ function ResponseActions() {
           setTimeout(() => setCopied(false), 1200)
         }}
       >
-        {copied ? <Check size={13} className="text-[color:var(--confidence-high)]" /> : <Copy size={13} />}
+        {copied ? (
+          <Check
+            size={13}
+            className="text-[color:var(--confidence-high)]"
+          />
+        ) : (
+          <Copy size={13} />
+        )}
       </button>
+
       <button
         className={iconClass}
         aria-label="Good response"
@@ -112,9 +132,12 @@ function ResponseActions() {
       >
         <ThumbsUp
           size={13}
-          className={vote === 'up' ? 'text-[color:var(--confidence-high)]' : ''}
+          className={
+            vote === 'up' ? 'text-[color:var(--confidence-high)]' : ''
+          }
         />
       </button>
+
       <button
         className={iconClass}
         aria-label="Bad response"
@@ -122,9 +145,12 @@ function ResponseActions() {
       >
         <ThumbsDown
           size={13}
-          className={vote === 'down' ? 'text-[color:var(--confidence-low)]' : ''}
+          className={
+            vote === 'down' ? 'text-[color:var(--confidence-low)]' : ''
+          }
         />
       </button>
+
       <button className={iconClass} aria-label="Share response">
         <Share2 size={13} />
       </button>
@@ -132,7 +158,11 @@ function ResponseActions() {
   )
 }
 
-export function ChatMessageItem({ message }: { message: ChatMessage }) {
+export function ChatMessageItem({
+  message,
+}: {
+  message: ChatMessage
+}) {
   if (message.role === 'user') {
     return (
       <div className="flex justify-end">
@@ -158,7 +188,10 @@ export function ChatMessageItem({ message }: { message: ChatMessage }) {
               <ReactMarkdown remarkPlugins={[remarkGfm]}>
                 {message.content}
               </ReactMarkdown>
-              {message.streaming && <span className="streaming-cursor" />}
+
+              {message.streaming && (
+                <span className="streaming-cursor" />
+              )}
             </div>
 
             {!message.streaming && (
@@ -168,7 +201,11 @@ export function ChatMessageItem({ message }: { message: ChatMessage }) {
                     <ConfidenceBadge level={message.confidence} />
                   </div>
                 )}
-                {message.sources && <Sources sources={message.sources} />}
+
+                {message.sources && (
+                  <Sources sources={message.sources} />
+                )}
+
                 <ResponseActions />
               </>
             )}
